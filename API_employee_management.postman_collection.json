@@ -379,7 +379,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"id\":1,\r\n    \"name\":\"dept entity 1\",\r\n    \"timestamp\":\"2022-07-29\",\r\n    \"companyEntity\":{\r\n        \"id\":4\r\n    }\r\n}",
+							"raw": "{\r\n    \"id\":5,\r\n    \"name\":\"dept\",\r\n    \"timestamp\":\"2022-07-29\",\r\n    \"companyEntity\":{\r\n        \"id\":4\r\n    }\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -387,7 +387,7 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:8080/api/v1/departement/update/1",
+							"raw": "localhost:8080/api/v1/departement/update/5",
 							"host": [
 								"localhost"
 							],
@@ -397,7 +397,29 @@
 								"v1",
 								"departement",
 								"update",
-								"1"
+								"5"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetByName Request",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/v1/departement/name/dept",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"departement",
+								"name",
+								"dept"
 							]
 						}
 					},

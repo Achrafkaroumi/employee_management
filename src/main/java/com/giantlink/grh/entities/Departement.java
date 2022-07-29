@@ -1,19 +1,12 @@
 package com.giantlink.grh.entities;
 
 import java.util.Date;
+import java.util.Set;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.PrePersist;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -33,12 +26,17 @@ public class Departement {
 	private Integer id;
 	private String name;
 	@ManyToOne
+	@JsonBackReference
 	@JoinColumn(name = "entity_id", nullable = false)
 	private CompanyEntity companyEntity;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(nullable = false)
 	private Date timestamp;
+
+	@OneToMany(fetch = FetchType.EAGER,mappedBy = "departement")
+	@JsonManagedReference
+	private Set<Team> teams;
 
 	@PrePersist
 	private void onCreate() {

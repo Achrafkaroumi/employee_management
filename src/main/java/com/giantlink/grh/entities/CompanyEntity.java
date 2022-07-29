@@ -44,5 +44,6 @@ public class CompanyEntity {
 	private Company company;
 
 	@OneToMany(mappedBy = "companyEntity", fetch = FetchType.EAGER)
+	@JsonManagedReference
 	private Set<Departement> departements;
 }

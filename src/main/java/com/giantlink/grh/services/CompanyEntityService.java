@@ -1,6 +1,6 @@
 package com.giantlink.grh.services;
 
-import java.util.Set;
+import java.util.List;
 
 import com.giantlink.grh.entities.CompanyEntity;
 
@@ -9,5 +9,7 @@ public interface CompanyEntityService {
 
 	CompanyEntity get(Integer id);
 
-	Set<CompanyEntity> get();
+	List<CompanyEntity> get();
+
+	void delete(Integer id);
 }

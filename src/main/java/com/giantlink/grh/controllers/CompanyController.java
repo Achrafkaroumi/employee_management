@@ -2,14 +2,11 @@ package com.giantlink.grh.controllers;
 
 import java.util.List;
 
+import com.giantlink.grh.entities.CompanyEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.giantlink.grh.entities.Company;
 import com.giantlink.grh.services.CompanyService;
@@ -26,8 +23,25 @@ public class CompanyController {
 		return new ResponseEntity<List<Company>>(companyService.get(), HttpStatus.OK);
 	}
 
-	@PostMapping
+	@GetMapping("/{id}")
+	public ResponseEntity<Company> get(@PathVariable Integer id) {
+		return new ResponseEntity<>(companyService.get(id), HttpStatus.OK);
+	}
+
+	@PostMapping("/add")
 	public ResponseEntity<Company> add(@RequestBody Company company) {
 		return new ResponseEntity<Company>(companyService.add(company), HttpStatus.CREATED);
+	}
+
+	@PutMapping("/update/{id}")
+	public ResponseEntity<Company> update(@PathVariable Integer id , @RequestBody Company company) {
+		company.setId(id);
+		return new ResponseEntity<>(companyService.add(company), HttpStatus.OK);
+	}
+
+	@DeleteMapping("/delete/{id}")
+	public ResponseEntity<Object> delete(@PathVariable Integer id) {
+		companyService.delete(id);
+		return new ResponseEntity<>("Company deleted", HttpStatus.OK);
 	}
 }

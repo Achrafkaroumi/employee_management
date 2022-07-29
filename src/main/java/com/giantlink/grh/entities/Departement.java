@@ -42,4 +42,5 @@ public class Departement {
 	private void onCreate() {
 		this.timestamp = new Date();
 	}
+
 }

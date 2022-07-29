@@ -30,4 +30,9 @@ public class CompanyServiceImpl implements CompanyService {
 		return companyRepository.findAll();
 	}
 
+	@Override
+	public void delete(Integer id) {
+		companyRepository.deleteById(id);
+	}
+
 }

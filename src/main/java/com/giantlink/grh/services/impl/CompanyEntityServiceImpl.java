@@ -1,5 +1,6 @@
 package com.giantlink.grh.services.impl;
 
+import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,14 +22,17 @@ public class CompanyEntityServiceImpl implements CompanyEntityService {
 
 	@Override
 	public CompanyEntity get(Integer id) {
-		// TODO Auto-generated method stub
-		return null;
+		return companyEntityRepository.findById(id).get();
 	}
 
 	@Override
-	public Set<CompanyEntity> get() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<CompanyEntity> get() {
+		return companyEntityRepository.findAll();
+	}
+
+	@Override
+	public void delete(Integer id) {
+		companyEntityRepository.deleteById(id);
 	}
 
 }

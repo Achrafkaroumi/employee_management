@@ -11,4 +11,6 @@ public interface CompanyService {
 	Company get(Integer id);
 
 	List<Company> get();
+
+	void delete(Integer id);
 }

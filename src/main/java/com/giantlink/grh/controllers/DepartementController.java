@@ -29,6 +29,11 @@ public class DepartementController {
 		return new ResponseEntity<>(departementService.get(id), HttpStatus.OK);
 	}
 
+	@GetMapping("/name/{name}")
+	public ResponseEntity<Departement> get(@PathVariable String name) {
+		return new ResponseEntity<>(departementService.get(name), HttpStatus.OK);
+	}
+
 	@PostMapping("/add")
 	public ResponseEntity<Departement> add(@RequestBody Departement departement) {
 		return new ResponseEntity<Departement>(departementService.add(departement), HttpStatus.CREATED);

@@ -1,5 +1,7 @@
 package com.giantlink.grh.controllers;
 
+import com.giantlink.grh.models.Requests.CompanyEntityRequest;
+import com.giantlink.grh.models.Responses.CompanyEntityResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,24 +20,23 @@ public class CompanyEntityController {
 	CompanyEntityService companyEntityService;
 
 	@GetMapping
-	public ResponseEntity<List<CompanyEntity>> getAll(){
+	public ResponseEntity<List<CompanyEntityResponse>> getAll(){
 		return new ResponseEntity<>(companyEntityService.get(), HttpStatus.OK);
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<CompanyEntity> getById(@PathVariable Integer id){
+	public ResponseEntity<CompanyEntityResponse> getById(@PathVariable Integer id){
 		return new ResponseEntity<>(companyEntityService.get(id), HttpStatus.OK);
 	}
 
 	@PostMapping("/add")
-	public ResponseEntity<CompanyEntity> add(@RequestBody CompanyEntity companyEntity){
-		return new ResponseEntity<CompanyEntity>(companyEntityService.add(companyEntity), HttpStatus.CREATED);
+	public ResponseEntity<CompanyEntityResponse> add(@RequestBody CompanyEntityRequest companyEntityRequest){
+		return new ResponseEntity<CompanyEntityResponse>(companyEntityService.add(companyEntityRequest), HttpStatus.CREATED);
 	}
 
 	@PutMapping("/update/{id}")
-	public ResponseEntity<CompanyEntity> update(@PathVariable Integer id, @RequestBody CompanyEntity companyEntity){
-		companyEntity.setId(id);
-		return new ResponseEntity<>(companyEntityService.add(companyEntity), HttpStatus.OK);
+	public ResponseEntity<CompanyEntityResponse> update(@PathVariable Integer id, @RequestBody CompanyEntityRequest companyEntity){
+		return new ResponseEntity<>(companyEntityService.update(id,companyEntity), HttpStatus.OK);
 	}
 
 	@DeleteMapping("/delete/{id}")

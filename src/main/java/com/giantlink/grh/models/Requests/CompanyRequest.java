@@ -21,9 +21,9 @@ public class CompanyRequest {
     @NotNull
     private String name;
     @Pattern(regexp = "^[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\\.[a-zA-Z]{2,4}$")
+    @NotNull
     private String email;
     @NotNull
     private String address;
 
-    //private Set<CompanyEntity> entities;
 }

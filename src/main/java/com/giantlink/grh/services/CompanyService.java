@@ -3,18 +3,20 @@ package com.giantlink.grh.services;
 import java.util.List;
 
 import com.giantlink.grh.entities.Company;
+import com.giantlink.grh.exceptions.AlreadyExists;
+import com.giantlink.grh.exceptions.NotFoundException;
 import com.giantlink.grh.models.Requests.CompanyRequest;
 import com.giantlink.grh.models.Responses.CompanyResponse;
 
 public interface CompanyService {
 
-	CompanyResponse add(CompanyRequest company);
+	CompanyResponse add(CompanyRequest company) throws AlreadyExists;
 
-	CompanyResponse get(Integer id);
+	CompanyResponse get(Integer id) throws NotFoundException;
 
-	List<CompanyResponse> get();
+	List<CompanyResponse> get() throws NotFoundException;
 
-	void delete(Integer id);
+	void delete(Integer id) throws NotFoundException;
 
-	CompanyResponse update(Integer id, CompanyRequest company);
+	CompanyResponse update(Integer id, CompanyRequest company) throws AlreadyExists, NotFoundException;
 }

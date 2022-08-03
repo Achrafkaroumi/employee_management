@@ -33,7 +33,7 @@ public class CompanyServiceImpl implements CompanyService {
 	@Override
 	public List<CompanyResponse> get() {
 		List<Company> companies = companyRepository.findAll();
-		return CompanyMapper.INSTANCE.companiesTocompanyResponses(companies);
+		return CompanyMapper.INSTANCE.companiesToCompanyResponses(companies);
 	}
 
 	@Override
@@ -46,9 +46,6 @@ public class CompanyServiceImpl implements CompanyService {
 		Company companies = CompanyMapper.INSTANCE.companyRequestToCompany(company);
 		if(companyRepository.findById(id).isPresent()){
 			companies.setId(id);
-			company.setAddress(company.getAddress());
-			company.setEmail(company.getEmail());
-			company.setName(company.getName());
 		}
 		return CompanyMapper.INSTANCE.companyToCompanyResponse(companyRepository.save(companies));
 	}

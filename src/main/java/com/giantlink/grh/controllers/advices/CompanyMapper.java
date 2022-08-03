@@ -15,5 +15,5 @@ public interface CompanyMapper {
     Company companyRequestToCompany (CompanyRequest company);
     CompanyResponse companyToCompanyResponse (Company company);
 
-    List<CompanyResponse> companiesTocompanyResponses(List<Company> companies);
+    List<CompanyResponse> companiesToCompanyResponses(List<Company> companies);
 }

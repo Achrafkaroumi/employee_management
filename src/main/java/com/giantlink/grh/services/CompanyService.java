@@ -3,14 +3,18 @@ package com.giantlink.grh.services;
 import java.util.List;
 
 import com.giantlink.grh.entities.Company;
+import com.giantlink.grh.models.Requests.CompanyRequest;
+import com.giantlink.grh.models.Responses.CompanyResponse;
 
 public interface CompanyService {
 
-	Company add(Company company);
+	CompanyResponse add(CompanyRequest company);
 
-	Company get(Integer id);
+	CompanyResponse get(Integer id);
 
-	List<Company> get();
+	List<CompanyResponse> get();
 
 	void delete(Integer id);
+
+	CompanyResponse update(Integer id, CompanyRequest company);
 }

@@ -21,13 +21,13 @@ public class CompanyServiceImpl implements CompanyService {
 	@Override
 	public CompanyResponse add(CompanyRequest companyRequest) {
 		Company company = CompanyMapper.INSTANCE.companyRequestToCompany(companyRequest);
-		return CompanyMapper.INSTANCE.companyResponseToCompany(companyRepository.save(company));
+		return CompanyMapper.INSTANCE.companyToCompanyResponse(companyRepository.save(company));
 	}
 
 	@Override
 	public CompanyResponse get(Integer id) {
 		Optional<Company> findById = companyRepository.findById(id);
-		return CompanyMapper.INSTANCE.companyResponseToCompany(findById.get());
+		return CompanyMapper.INSTANCE.companyToCompanyResponse(findById.get());
 	}
 
 	@Override
@@ -50,7 +50,7 @@ public class CompanyServiceImpl implements CompanyService {
 			company.setEmail(company.getEmail());
 			company.setName(company.getName());
 		}
-		return CompanyMapper.INSTANCE.companyResponseToCompany(companyRepository.save(companies));
+		return CompanyMapper.INSTANCE.companyToCompanyResponse(companyRepository.save(companies));
 	}
 
 }

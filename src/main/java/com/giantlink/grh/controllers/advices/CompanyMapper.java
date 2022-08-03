@@ -13,7 +13,7 @@ public interface CompanyMapper {
     CompanyMapper INSTANCE = Mappers.getMapper(CompanyMapper.class);
 
     Company companyRequestToCompany (CompanyRequest company);
-    CompanyResponse companyResponseToCompany (Company company);
+    CompanyResponse companyToCompanyResponse (Company company);
 
     List<CompanyResponse> companiesTocompanyResponses(List<Company> companies);
 }

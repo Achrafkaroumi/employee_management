@@ -1,13 +1,12 @@
 package com.giantlink.grh.models.Responses;
 
-import com.giantlink.grh.entities.Company;
-import com.giantlink.grh.entities.Departement;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Set;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -15,4 +14,5 @@ import java.util.Set;
 public class CompanyEntityResponse {
     private Integer id;
     private String name;
+    private Set<DepartementResponse> departements;
 }

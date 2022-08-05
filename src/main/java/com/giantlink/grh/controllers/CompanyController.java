@@ -35,12 +35,12 @@ public class CompanyController {
 	}
 
 	@PostMapping("/add")
-	public ResponseEntity<CompanyResponse> add(@RequestBody @Valid CompanyRequest company) throws AlreadyExists{
+	public ResponseEntity<CompanyResponse> add(@Valid @RequestBody CompanyRequest company) throws AlreadyExists{
 		return new ResponseEntity<CompanyResponse>(companyService.add(company), HttpStatus.CREATED);
 	}
 
 	@PutMapping("/update/{id}")
-	public ResponseEntity<CompanyResponse> update(@PathVariable Integer id , @RequestBody @Valid CompanyRequest company) throws AlreadyExists, NotFoundException {
+	public ResponseEntity<CompanyResponse> update(@PathVariable Integer id ,@Valid @RequestBody CompanyRequest company) throws AlreadyExists, NotFoundException {
 		return new ResponseEntity<>(companyService.update(id,company), HttpStatus.OK);
 	}
 

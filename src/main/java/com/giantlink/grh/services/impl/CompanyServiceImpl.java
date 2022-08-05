@@ -3,7 +3,7 @@ package com.giantlink.grh.services.impl;
 import java.util.List;
 import java.util.Optional;
 
-import com.giantlink.grh.controllers.advices.CompanyMapper;
+import com.giantlink.grh.mappers.CompanyMapper;
 import com.giantlink.grh.exceptions.AlreadyExists;
 import com.giantlink.grh.exceptions.NotFoundException;
 import com.giantlink.grh.models.Requests.CompanyRequest;
@@ -24,7 +24,7 @@ public class CompanyServiceImpl implements CompanyService {
 	public CompanyResponse add(CompanyRequest companyRequest) throws AlreadyExists {
 		Company company = CompanyMapper.INSTANCE.companyRequestToCompany(companyRequest);
 		if(companyRepository.findByName(company.getName())!= null) {
-			throw new AlreadyExists("Company: "+company.getName()+ " already exists");
+			throw new AlreadyExists("Company with name : {"+company.getName()+ "} already exists");
 		}
 		return CompanyMapper.INSTANCE.companyToCompanyResponse(companyRepository.save(company));
 	}
@@ -33,7 +33,7 @@ public class CompanyServiceImpl implements CompanyService {
 	public CompanyResponse get(Integer id) throws NotFoundException {
 		Optional<Company> findById = companyRepository.findById(id);
 		if(findById.isPresent()==false) {
-			throw new NotFoundException("Company not found");
+			throw new NotFoundException("Company with id : "+id+ "not found");
 		}
 		return CompanyMapper.INSTANCE.companyToCompanyResponse(findById.get());
 	}
@@ -41,7 +41,7 @@ public class CompanyServiceImpl implements CompanyService {
 	@Override
 	public List<CompanyResponse> get() throws NotFoundException{
 		if(companyRepository.findAll().isEmpty()) {
-			throw new NotFoundException("Companies not found , add company first");
+			throw new NotFoundException("Companies not found");
 		}
 		List<Company> companies = companyRepository.findAll();
 		return CompanyMapper.INSTANCE.companiesToCompanyResponses(companies);
@@ -51,7 +51,7 @@ public class CompanyServiceImpl implements CompanyService {
 	public void delete(Integer id) throws NotFoundException {
 		Optional<Company> findById = companyRepository.findById(id);
 		if(findById.isPresent()==false) {
-			throw new NotFoundException("Company not found");
+			throw new NotFoundException("Company with id : "+id+ " not found");
 		}
 		companyRepository.deleteById(id);
 	}
@@ -60,11 +60,11 @@ public class CompanyServiceImpl implements CompanyService {
 	public CompanyResponse update(Integer id, CompanyRequest company) throws AlreadyExists, NotFoundException {
 		Company companies = CompanyMapper.INSTANCE.companyRequestToCompany(company);
 		if(companyRepository.findById(id).isPresent()==false) {
-			throw new NotFoundException("Company not found");
+			throw new NotFoundException("Company with id : "+id+ "not found");
 		}
 
 		if(companyRepository.findByName(companies.getName())!= null) {
-			throw new AlreadyExists("Company: "+companies.getName()+ " already exists");
+			throw new AlreadyExists("Company with name : {"+companies.getName()+ "} already exists");
 		}
 
 		if(companyRepository.findById(id).isPresent()){

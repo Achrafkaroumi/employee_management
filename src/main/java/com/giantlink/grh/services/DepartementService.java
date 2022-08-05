@@ -4,15 +4,20 @@ import java.util.List;
 import java.util.Set;
 
 import com.giantlink.grh.entities.Departement;
+import com.giantlink.grh.exceptions.AlreadyExists;
+import com.giantlink.grh.exceptions.NotFoundException;
+import com.giantlink.grh.models.Requests.DepartementRequest;
+import com.giantlink.grh.models.Responses.DepartementResponse;
 
 public interface DepartementService {
-	Departement add(Departement departement);
+	DepartementResponse add(DepartementRequest departementRequest) throws AlreadyExists;
 
-	Departement get(Integer id);
+	DepartementResponse get(Integer id) throws NotFoundException;
 
-	Departement get(String name);
+	DepartementResponse get(String name) throws NotFoundException;
 
-	List<Departement> get();
-	
-	void delete(Integer id);
+	List<DepartementResponse> get() throws NotFoundException;
+
+	DepartementResponse update(Integer id ,DepartementRequest departementRequest) throws NotFoundException, AlreadyExists;
+	void delete(Integer id) throws NotFoundException;
 }

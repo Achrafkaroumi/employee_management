@@ -1,12 +1,16 @@
 package com.giantlink.grh.controllers;
 
 import com.giantlink.grh.entities.Employee;
+import com.giantlink.grh.exceptions.NotFoundException;
+import com.giantlink.grh.models.Requests.EmployeeRequest;
+import com.giantlink.grh.models.Responses.EmployeeResponse;
 import com.giantlink.grh.services.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -20,28 +24,27 @@ public class EmployeeController {
 	}
 
 	@GetMapping
-	public ResponseEntity<List<Employee>> get() {
-		return new ResponseEntity<List<Employee>>(employeeService.get(), HttpStatus.OK);
+	public ResponseEntity<List<EmployeeResponse>> get() throws NotFoundException{
+		return new ResponseEntity<List<EmployeeResponse>>(employeeService.get(), HttpStatus.OK);
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<Employee> get(@PathVariable Integer id) {
+	public ResponseEntity<EmployeeResponse> get(@PathVariable Integer id) throws NotFoundException {
 		return new ResponseEntity<>(employeeService.get(id), HttpStatus.OK);
 	}
 
 	@PostMapping("/add")
-	public ResponseEntity<Employee> add(@RequestBody Employee employee) {
-		return new ResponseEntity<Employee>(employeeService.add(employee), HttpStatus.CREATED);
+	public ResponseEntity<EmployeeResponse> add(@RequestBody @Valid EmployeeRequest employeeRequest) {
+		return new ResponseEntity<EmployeeResponse>(employeeService.add(employeeRequest), HttpStatus.CREATED);
 	}
 
 	@PutMapping("/update/{id}")
-	public ResponseEntity<Employee> update(@PathVariable Integer id , @RequestBody Employee employee) {
-		employee.setId(id);
-		return new ResponseEntity<>(employeeService.add(employee), HttpStatus.OK);
+	public ResponseEntity<EmployeeResponse> update(@PathVariable Integer id , @RequestBody EmployeeRequest employeeRequest)throws NotFoundException{
+		return new ResponseEntity<>(employeeService.update(id,employeeRequest), HttpStatus.OK);
 	}
 
 	@DeleteMapping("/delete/{id}")
-	public ResponseEntity<Object> delete(@PathVariable Integer id) {
+	public ResponseEntity<Object> delete(@PathVariable Integer id) throws NotFoundException{
 		employeeService.delete(id);
 		return new ResponseEntity<>("Employee deleted", HttpStatus.OK);
 	}

@@ -5,16 +5,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Set;
-
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CompanyResponse {
+public class EmployeeResponse {
     private Integer id;
-    private String name;
-    private String email;
-    private String address;
-    private Set<CompanyEntityResponse> entities;
 }

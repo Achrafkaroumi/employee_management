@@ -2,12 +2,16 @@ package com.giantlink.grh.controllers;
 
 import com.giantlink.grh.entities.Occupation;
 import com.giantlink.grh.entities.Team;
+import com.giantlink.grh.exceptions.NotFoundException;
+import com.giantlink.grh.models.Requests.OccupationRequest;
+import com.giantlink.grh.models.Responses.OccupationResponse;
 import com.giantlink.grh.services.OccupationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -21,28 +25,27 @@ public class OccupationController {
 	}
 
 	@GetMapping
-	public ResponseEntity<List<Occupation>> get() {
-		return new ResponseEntity<List<Occupation>>(occupationService.get(), HttpStatus.OK);
+	public ResponseEntity<List<OccupationResponse>> get() throws NotFoundException {
+		return new ResponseEntity<List<OccupationResponse>>(occupationService.get(), HttpStatus.OK);
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<Occupation> get(@PathVariable Integer id) {
+	public ResponseEntity<OccupationResponse> get(@PathVariable Integer id) throws NotFoundException {
 		return new ResponseEntity<>(occupationService.get(id), HttpStatus.OK);
 	}
 
 	@PostMapping("/add")
-	public ResponseEntity<Occupation> add(@RequestBody Occupation occupation) {
-		return new ResponseEntity<Occupation>(occupationService.add(occupation), HttpStatus.CREATED);
+	public ResponseEntity<OccupationResponse> add(@RequestBody @Valid OccupationRequest occupationRequest) {
+		return new ResponseEntity<OccupationResponse>(occupationService.add(occupationRequest), HttpStatus.CREATED);
 	}
 
 	@PutMapping("/update/{id}")
-	public ResponseEntity<Occupation> update(@PathVariable Integer id , @RequestBody Occupation occupation) {
-		occupation.setId(id);
-		return new ResponseEntity<>(occupationService.add(occupation), HttpStatus.OK);
+	public ResponseEntity<OccupationResponse> update(@PathVariable Integer id , @RequestBody @Valid OccupationRequest occupationRequest) throws NotFoundException {
+		return new ResponseEntity<>(occupationService.update(id,occupationRequest), HttpStatus.OK);
 	}
 
 	@DeleteMapping("/delete/{id}")
-	public ResponseEntity<Object> delete(@PathVariable Integer id) {
+	public ResponseEntity<Object> delete(@PathVariable Integer id) throws NotFoundException {
 		occupationService.delete(id);
 		return new ResponseEntity<>("Occupation deleted", HttpStatus.OK);
 	}

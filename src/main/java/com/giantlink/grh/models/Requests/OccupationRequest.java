@@ -1,23 +1,24 @@
 package com.giantlink.grh.models.Requests;
 
-import com.giantlink.grh.entities.Company;
+import com.giantlink.grh.entities.Employee;
+import com.giantlink.grh.entities.Job;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.sql.Date;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CompanyEntityRequest {
+public class OccupationRequest {
     @NotNull
-    @NotBlank(message = "Company name is required")
-    private String name;
+    private Date dateOccupation;
     @NotNull
-    private Company company;
+    public boolean isCurrent;
+    private Employee employee;
+    private Job job;
 }

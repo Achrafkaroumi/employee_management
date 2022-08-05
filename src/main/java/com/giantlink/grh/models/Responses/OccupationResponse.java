@@ -5,16 +5,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Set;
+import java.sql.Date;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CompanyResponse {
+public class OccupationResponse {
     private Integer id;
-    private String name;
-    private String email;
-    private String address;
-    private Set<CompanyEntityResponse> entities;
+    private Date dateOccupation;
+    private boolean isCurrent;
 }

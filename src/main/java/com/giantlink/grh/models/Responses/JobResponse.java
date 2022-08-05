@@ -1,6 +1,6 @@
 package com.giantlink.grh.models.Responses;
 
-import com.giantlink.grh.entities.Occupation;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,7 +12,7 @@ import java.util.Set;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class EmployeeResponse {
+public class JobResponse {
     private Integer id;
-    private Set<OccupationResponse> occupations;
+    private Set<OccupationResponse> occupations ;
 }

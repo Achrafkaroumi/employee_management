@@ -2,12 +2,16 @@ package com.giantlink.grh.controllers;
 
 import com.giantlink.grh.entities.Job;
 import com.giantlink.grh.entities.Team;
+import com.giantlink.grh.exceptions.NotFoundException;
+import com.giantlink.grh.models.Requests.JobRequest;
+import com.giantlink.grh.models.Responses.JobResponse;
 import com.giantlink.grh.services.JobService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -21,28 +25,27 @@ public class JobController {
 	}
 
 	@GetMapping
-	public ResponseEntity<List<Job>> get() {
-		return new ResponseEntity<List<Job>>(jobService.get(), HttpStatus.OK);
+	public ResponseEntity<List<JobResponse>> get() throws NotFoundException {
+		return new ResponseEntity<List<JobResponse>>(jobService.get(), HttpStatus.OK);
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<Job> get(@PathVariable Integer id) {
+	public ResponseEntity<JobResponse> get(@PathVariable Integer id) throws NotFoundException{
 		return new ResponseEntity<>(jobService.get(id), HttpStatus.OK);
 	}
 
 	@PostMapping("/add")
-	public ResponseEntity<Job> add(@RequestBody Job job) {
-		return new ResponseEntity<Job>(jobService.add(job), HttpStatus.CREATED);
+	public ResponseEntity<JobResponse> add(@RequestBody @Valid JobRequest jobRequest) {
+		return new ResponseEntity<JobResponse>(jobService.add(jobRequest), HttpStatus.CREATED);
 	}
 
 	@PutMapping("/update/{id}")
-	public ResponseEntity<Job> update(@PathVariable Integer id , @RequestBody Job job) {
-		job.setId(id);
-		return new ResponseEntity<>(jobService.add(job), HttpStatus.OK);
+	public ResponseEntity<JobResponse> update(@PathVariable Integer id , @RequestBody JobRequest jobRequest) throws NotFoundException{
+		return new ResponseEntity<>(jobService.update(id,jobRequest), HttpStatus.OK);
 	}
 
 	@DeleteMapping("/delete/{id}")
-	public ResponseEntity<Object> delete(@PathVariable Integer id) {
+	public ResponseEntity<Object> delete(@PathVariable Integer id) throws NotFoundException{
 		jobService.delete(id);
 		return new ResponseEntity<>("Job deleted", HttpStatus.OK);
 	}

@@ -1,12 +1,17 @@
 package com.giantlink.grh.services.impl;
 
 import com.giantlink.grh.entities.Job;
+import com.giantlink.grh.exceptions.NotFoundException;
+import com.giantlink.grh.mappers.JobMapper;
+import com.giantlink.grh.models.Requests.JobRequest;
+import com.giantlink.grh.models.Responses.JobResponse;
 import com.giantlink.grh.repositories.JobRepository;
 import com.giantlink.grh.services.JobService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class JobServiceImpl implements JobService {
@@ -18,22 +23,45 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
-    public List<Job> get() {
-        return jobRepository.findAll();
+    public List<JobResponse> get() throws NotFoundException {
+        if(jobRepository.findAll().isEmpty()) {
+            throw new NotFoundException("No jobs found");
+        }
+        return JobMapper.INSTANCE.jobListToResponse(jobRepository.findAll());
     }
 
     @Override
-    public Job get(Integer id) {
-        return jobRepository.findById(id).get();
+    public JobResponse get(Integer id) throws NotFoundException {
+        Optional<Job> jobById = jobRepository.findById(id);
+        if(!jobById.isPresent()) {
+            throw new NotFoundException("Job with id : "+id+" not found");
+        }
+        return JobMapper.INSTANCE.jobToResponse(jobById.get());
     }
 
     @Override
-    public Job add(Job job) {
-        return jobRepository.save(job);
+    public JobResponse add(JobRequest jobRequest) {
+        Job job = JobMapper.INSTANCE.requestToJob(jobRequest);
+        return JobMapper.INSTANCE.jobToResponse(jobRepository.save(job));
     }
 
     @Override
-    public void delete(Integer id) {
+    public JobResponse update(Integer id, JobRequest jobRequest) throws NotFoundException{
+        Job job = JobMapper.INSTANCE.requestToJob(jobRequest);
+        if(!jobRepository.findById(id).isPresent()) {
+            throw new NotFoundException("Job with id : "+id+" not found");
+        }
+        if(jobRepository.findById(id).isPresent()){
+            job.setId(id);
+        }
+        return JobMapper.INSTANCE.jobToResponse(jobRepository.save(job));
+    }
+
+    @Override
+    public void delete(Integer id) throws NotFoundException{
+        if(!jobRepository.findById(id).isPresent()) {
+            throw new NotFoundException("Job with id : "+id+" not found");
+        }
         jobRepository.deleteById(id);
     }
 }

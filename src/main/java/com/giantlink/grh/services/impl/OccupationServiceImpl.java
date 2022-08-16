@@ -1,6 +1,7 @@
 package com.giantlink.grh.services.impl;
 
 import com.giantlink.grh.entities.Occupation;
+import com.giantlink.grh.exceptions.AlreadyExists;
 import com.giantlink.grh.exceptions.NotFoundException;
 import com.giantlink.grh.mappers.OccupationMapper;
 import com.giantlink.grh.models.Requests.OccupationRequest;
@@ -35,25 +36,29 @@ public class OccupationServiceImpl implements OccupationService {
     public OccupationResponse get(Integer id) throws NotFoundException{
         Optional<Occupation> occupation = occupationRepository.findById(id);
         if(!occupation.isPresent()) {
-            throw new NotFoundException("Occupation with id : "+id+ " not found");
+            throw new NotFoundException("Occupation not found");
         }
         return OccupationMapper.INSTANCE.occupationToResponse(occupation.get());
     }
 
     @Override
-    public OccupationResponse add(OccupationRequest occupationRequest) {
+    public OccupationResponse add(OccupationRequest occupationRequest) throws AlreadyExists {
+        if(occupationRepository.findByOccupationName(occupationRequest.getOccupationName())!=null){
+            throw new AlreadyExists("Occupation with name : "+occupationRequest.getOccupationName()+" already exists");
+        }
         Occupation occupation = OccupationMapper.INSTANCE.requestToOccupation(occupationRequest);
         return OccupationMapper.INSTANCE.occupationToResponse(occupationRepository.save(occupation));
     }
 
     @Override
-    public OccupationResponse update(Integer id, OccupationRequest occupationRequest) throws NotFoundException {
+    public OccupationResponse update(Integer id, OccupationRequest occupationRequest) throws NotFoundException{
         Occupation occupation = OccupationMapper.INSTANCE.requestToOccupation(occupationRequest);
-        if(!occupationRepository.findById(id).isPresent()) {
-            throw new NotFoundException("Occupation with id : "+id+ " not found");
+        Optional<Occupation> findById = occupationRepository.findById(id);
+        if(!findById.isPresent()) {
+            throw new NotFoundException("Occupation not found");
         }
-        if(occupationRepository.findById(id).isPresent()) {
-            occupation.setId(id);
+        if(findById.isPresent()) {
+                occupation.setId(id);
         }
         return OccupationMapper.INSTANCE.occupationToResponse(occupationRepository.save(occupation));
     }
@@ -61,7 +66,7 @@ public class OccupationServiceImpl implements OccupationService {
     @Override
     public void delete(Integer id) throws NotFoundException{
         if(!occupationRepository.findById(id).isPresent()){
-            throw new NotFoundException("Occupation with id : "+id+ " not found");
+            throw new NotFoundException("Occupation not found");
         }
         occupationRepository.deleteById(id);
     }

@@ -19,6 +19,8 @@ public class OccupationRequest {
     private Date dateOccupation;
     @NotNull
     public boolean isCurrent;
+    @NotNull
+    private String occupationName;
     private Employee employee;
     private Job job;
 }

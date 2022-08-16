@@ -9,6 +9,9 @@ import com.giantlink.grh.exceptions.NotFoundException;
 import com.giantlink.grh.models.Requests.CompanyRequest;
 import com.giantlink.grh.models.Responses.CompanyResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.giantlink.grh.entities.Company;
@@ -24,7 +27,7 @@ public class CompanyServiceImpl implements CompanyService {
 	public CompanyResponse add(CompanyRequest companyRequest) throws AlreadyExists {
 		Company company = CompanyMapper.INSTANCE.companyRequestToCompany(companyRequest);
 		if(companyRepository.findByName(company.getName())!= null) {
-			throw new AlreadyExists("Company with name : {"+company.getName()+ "} already exists");
+			throw new AlreadyExists("Company with name : "+company.getName()+ " already exists");
 		}
 		return CompanyMapper.INSTANCE.companyToCompanyResponse(companyRepository.save(company));
 	}
@@ -33,7 +36,7 @@ public class CompanyServiceImpl implements CompanyService {
 	public CompanyResponse get(Integer id) throws NotFoundException {
 		Optional<Company> findById = companyRepository.findById(id);
 		if(findById.isPresent()==false) {
-			throw new NotFoundException("Company with id : "+id+ "not found");
+			throw new NotFoundException("Company not found");
 		}
 		return CompanyMapper.INSTANCE.companyToCompanyResponse(findById.get());
 	}
@@ -41,7 +44,7 @@ public class CompanyServiceImpl implements CompanyService {
 	@Override
 	public List<CompanyResponse> get() throws NotFoundException{
 		if(companyRepository.findAll().isEmpty()) {
-			throw new NotFoundException("Companies not found");
+			throw new NotFoundException("Companies not found , please add some companies");
 		}
 		List<Company> companies = companyRepository.findAll();
 		return CompanyMapper.INSTANCE.companiesToCompanyResponses(companies);
@@ -51,26 +54,29 @@ public class CompanyServiceImpl implements CompanyService {
 	public void delete(Integer id) throws NotFoundException {
 		Optional<Company> findById = companyRepository.findById(id);
 		if(findById.isPresent()==false) {
-			throw new NotFoundException("Company with id : "+id+ " not found");
+			throw new NotFoundException("Company not found");
 		}
 		companyRepository.deleteById(id);
 	}
 
 	@Override
-	public CompanyResponse update(Integer id, CompanyRequest company) throws AlreadyExists, NotFoundException {
+	public CompanyResponse update(Integer id, CompanyRequest company) throws NotFoundException {
 		Company companies = CompanyMapper.INSTANCE.companyRequestToCompany(company);
-		if(companyRepository.findById(id).isPresent()==false) {
-			throw new NotFoundException("Company with id : "+id+ "not found");
+		Optional<Company> findById = companyRepository.findById(id);
+		if(findById.isPresent()==false) {
+			throw new NotFoundException("Company not found");
 		}
-
-		if(companyRepository.findByName(companies.getName())!= null) {
-			throw new AlreadyExists("Company with name : {"+companies.getName()+ "} already exists");
-		}
-
-		if(companyRepository.findById(id).isPresent()){
+		if(findById.isPresent()){
 			companies.setId(id);
 		}
 		return CompanyMapper.INSTANCE.companyToCompanyResponse(companyRepository.save(companies));
 	}
+
+	@Override
+	public List<Company> get(Pageable pageable) {
+		Page page = companyRepository.findAll(pageable);
+		return page.getContent();
+	}
+
 
 }

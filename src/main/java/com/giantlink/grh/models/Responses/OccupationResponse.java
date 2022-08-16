@@ -15,4 +15,5 @@ public class OccupationResponse {
     private Integer id;
     private Date dateOccupation;
     private boolean isCurrent;
+    private String occupationName;
 }

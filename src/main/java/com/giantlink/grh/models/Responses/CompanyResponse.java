@@ -16,5 +16,6 @@ public class CompanyResponse {
     private String name;
     private String email;
     private String address;
+    private String phone;
     private Set<CompanyEntityResponse> entities;
 }

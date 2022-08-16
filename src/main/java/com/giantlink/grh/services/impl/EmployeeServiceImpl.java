@@ -1,6 +1,7 @@
 package com.giantlink.grh.services.impl;
 
 import com.giantlink.grh.entities.Employee;
+import com.giantlink.grh.exceptions.AlreadyExists;
 import com.giantlink.grh.exceptions.NotFoundException;
 import com.giantlink.grh.mappers.EmployeeMapper;
 import com.giantlink.grh.models.Requests.EmployeeRequest;
@@ -35,25 +36,29 @@ public class EmployeeServiceImpl implements EmployeeService {
     public EmployeeResponse get(Integer id) throws NotFoundException{
         Optional<Employee> findEmployeeId = employeeRepository.findById(id);
         if(!findEmployeeId.isPresent()){
-            throw new NotFoundException("Employee with id : "+id+" not found");
+            throw new NotFoundException("Employee not found");
         }
         return EmployeeMapper.INSTANCE.employeeToResponse(findEmployeeId.get());
     }
 
     @Override
-    public EmployeeResponse add(EmployeeRequest employeeRequest) {
+    public EmployeeResponse add(EmployeeRequest employeeRequest) throws AlreadyExists {
+        if(employeeRepository.findByFirstName(employeeRequest.getFirstName())!=null && employeeRepository.findByLastName(employeeRequest.getLastName())!=null) {
+            throw new AlreadyExists("Employee with first name : "+employeeRequest.getFirstName()+" and last name : "+employeeRequest.getLastName()+" already exists");
+        }
         Employee employee = EmployeeMapper.INSTANCE.requestToEmployee(employeeRequest);
         return EmployeeMapper.INSTANCE.employeeToResponse(employeeRepository.save(employee));
     }
 
     @Override
-    public EmployeeResponse update(Integer id, EmployeeRequest employeeRequest) throws NotFoundException {
+    public EmployeeResponse update(Integer id, EmployeeRequest employeeRequest) throws  NotFoundException {
         Employee employee = EmployeeMapper.INSTANCE.requestToEmployee(employeeRequest);
-        if(!employeeRepository.findById(id).isPresent()){
-            throw new NotFoundException("Employee with id : " +id+ " not found");
+        Optional<Employee> findEmployeeId = employeeRepository.findById(id);
+        if(!findEmployeeId.isPresent()){
+            throw new NotFoundException("Employee not found");
         }
-        if(employeeRepository.findById(id).isPresent()){
-            employee.setId(id);
+        if(findEmployeeId.isPresent()){
+                employee.setId(id);
         }
         return EmployeeMapper.INSTANCE.employeeToResponse(employeeRepository.save(employee));
     }
@@ -61,7 +66,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public void delete(Integer id) throws NotFoundException{
         if(!employeeRepository.findById(id).isPresent()){
-            throw new NotFoundException ("Employee with id : "+id+" not found");
+            throw new NotFoundException ("Employee not found");
         }
         employeeRepository.deleteById(id);
     }

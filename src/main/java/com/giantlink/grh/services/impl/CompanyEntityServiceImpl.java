@@ -34,7 +34,7 @@ public class CompanyEntityServiceImpl implements CompanyEntityService {
 	public CompanyEntityResponse get(Integer id) throws NotFoundException {
 		Optional<CompanyEntity> companyEntity = companyEntityRepository.findById(id);
 		if(!companyEntity.isPresent()) {
-			throw new NotFoundException("CompanyEntity with id " + id + " not found");
+			throw new NotFoundException("CompanyEntity not found");
 		}
 		return CompanyEntityMapper.INSTANCE.companyEntityToResponse(companyEntity.get());
 	}
@@ -51,15 +51,17 @@ public class CompanyEntityServiceImpl implements CompanyEntityService {
 	@Override
 	public CompanyEntityResponse update(Integer id, CompanyEntityRequest companyEntity) throws NotFoundException , AlreadyExists {
 		CompanyEntity companyEntityToUpdate = CompanyEntityMapper.INSTANCE.RequestToCompanyEntity(companyEntity);
-		if(!companyEntityRepository.findById(id).isPresent()) {
-			throw new NotFoundException("Company with id " + id+ " not found");
-		}
-		if(companyEntityRepository.findByName(companyEntity.getName()) != null) {
-			throw new AlreadyExists("Company with name {" +companyEntity.getName()+ "} already exists");
+		Optional<CompanyEntity> findById = companyEntityRepository.findById(id);
+		if(!findById.isPresent()) {
+			throw new NotFoundException("Company not found");
 		}
 
-		if(companyEntityRepository.findById(id).isPresent()){
-			companyEntityToUpdate.setId(id);
+		if(findById.isPresent()){
+			if(findById.get().getName().equals(companyEntity.getName())) {
+				companyEntityToUpdate.setId(id);
+			}else{
+				throw new AlreadyExists("Company with name " +companyEntity.getName()+ " already exists");
+			}
 		}
 		return CompanyEntityMapper.INSTANCE.companyEntityToResponse(companyEntityRepository.save(companyEntityToUpdate));
 	}
@@ -68,7 +70,7 @@ public class CompanyEntityServiceImpl implements CompanyEntityService {
 	public void delete(Integer id) throws NotFoundException {
 		Optional<CompanyEntity> findById = companyEntityRepository.findById(id);
 		if(findById.isPresent()==false) {
-			throw new NotFoundException("Company entities with id : "+id+ " not found");
+			throw new NotFoundException("Company entities not found");
 		}
 		companyEntityRepository.deleteById(id);
 	}

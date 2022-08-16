@@ -15,6 +15,7 @@ import com.giantlink.grh.services.CompanyEntityService;
 import javax.validation.Valid;
 import java.util.List;
 
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/v1/company/entity")
 public class CompanyEntityController {

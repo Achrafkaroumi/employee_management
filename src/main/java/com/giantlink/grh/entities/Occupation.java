@@ -23,6 +23,7 @@ public class Occupation {
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date dateOccupation;
     private boolean isCurrent;
+    private String occupationName;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "employee_id")

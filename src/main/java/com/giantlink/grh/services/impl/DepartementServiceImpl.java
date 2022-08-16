@@ -26,7 +26,7 @@ public class DepartementServiceImpl implements DepartementService {
 	public DepartementResponse add(DepartementRequest departementRequest) throws AlreadyExists {
 		Optional<Departement> departementName = departementRepository.findByName(departementRequest.getName());
 		if(departementName.isPresent()) {
-			throw new AlreadyExists("Departement with name : { "+departementRequest.getName()+" } already exists");
+			throw new AlreadyExists("Department with name : "+departementRequest.getName()+" already exists");
 		}
 		Departement departement = DepartementMapper.INSTANCE.requestToDepartement(departementRequest);
 		return DepartementMapper.INSTANCE.departementToResponse(departementRepository.save(departement));
@@ -36,7 +36,7 @@ public class DepartementServiceImpl implements DepartementService {
 	public DepartementResponse get(Integer id) throws NotFoundException {
 		Optional<Departement> departement = departementRepository.findById(id);
 		if(!departement.isPresent()){
-			throw  new NotFoundException("Departement with id : "+id+" not found");
+			throw  new NotFoundException("Department not found");
 		}
 		return DepartementMapper.INSTANCE.departementToResponse(departement.get());
 	}
@@ -45,7 +45,7 @@ public class DepartementServiceImpl implements DepartementService {
 	public DepartementResponse get(String name) throws NotFoundException {
 		Optional<Departement> departementName = departementRepository.findByName(name);
 		if (!departementName.isPresent()) {
-			throw new NotFoundException("Departement with name : { "+name+" } not found");
+			throw new NotFoundException("Department with name : "+name+" not found");
 		}
 		return DepartementMapper.INSTANCE.departementToResponse(departementName.get());
 	}
@@ -54,7 +54,7 @@ public class DepartementServiceImpl implements DepartementService {
 	public List<DepartementResponse> get() throws NotFoundException {
 		List<Departement> departementsList = departementRepository.findAll();
 		if(departementsList.isEmpty()) {
-			throw new NotFoundException("No Departement found");
+			throw new NotFoundException("No Department found");
 		}
 		return DepartementMapper.INSTANCE.departementsListToResponses(departementsList);
 	}
@@ -62,14 +62,16 @@ public class DepartementServiceImpl implements DepartementService {
 	@Override
 	public DepartementResponse update(Integer id, DepartementRequest departementRequest) throws NotFoundException , AlreadyExists {
 		Departement departement = DepartementMapper.INSTANCE.requestToDepartement(departementRequest);
-		if(!departementRepository.findById(id).isPresent()) {
-			throw new NotFoundException("Departement with id : "+id+" not found");
+		Optional<Departement> findById = departementRepository.findById(id);
+		if(!findById.isPresent()) {
+			throw new NotFoundException("Department not found");
 		}
-		if(departementRepository.findByName(departementRequest.getName()).isPresent()==true) {
-			throw new AlreadyExists("Departement with name : { "+departementRequest.getName()+" } already exists");
-		}
-		if(departementRepository.findById(id).isPresent()) {
-			departement.setId(id);
+		if(findById.isPresent()) {
+			if(findById.get().getName().equals(departementRequest.getName())) {
+				departement.setId(id);
+			}else{
+				throw new AlreadyExists("Department with name : "+departementRequest.getName()+" already exists");
+			}
 		}
 		return DepartementMapper.INSTANCE.departementToResponse(departementRepository.save(departement));
 	}
@@ -78,7 +80,7 @@ public class DepartementServiceImpl implements DepartementService {
 	public void delete(Integer id) throws NotFoundException {
 		Optional<Departement> findDepartementId =departementRepository.findById(id);
 		if(!findDepartementId.isPresent()) {
-			throw new NotFoundException("Departement with id : "+id+" not found");
+			throw new NotFoundException("Department not found");
 		}
 		departementRepository.deleteById(id);
 	}

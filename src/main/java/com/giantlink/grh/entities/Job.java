@@ -21,6 +21,8 @@ public class Job {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
+    private String name;
+    private String description;
 
     @OneToMany(mappedBy = "job", fetch = FetchType.EAGER)
     @JsonManagedReference(value = "job-occupation")

@@ -21,6 +21,10 @@ public class Employee {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
+    private String firstName;
+    private String lastName;
+    private String email;
+    private String phone;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "team_id")

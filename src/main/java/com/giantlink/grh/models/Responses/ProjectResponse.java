@@ -14,5 +14,7 @@ import java.util.Set;
 @NoArgsConstructor
 public class ProjectResponse {
     private Integer id;
+    private String projectName;
+    private String projectDesc;
     private Set<JobResponse> jobs;
 }

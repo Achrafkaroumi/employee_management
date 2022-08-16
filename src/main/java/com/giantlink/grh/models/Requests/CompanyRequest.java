@@ -32,4 +32,8 @@ public class CompanyRequest {
     @NotBlank(message = "Address is required")
     private String address;
 
+    @NotNull
+    @NotBlank(message = "Phone number is required")
+    private String phone;
+
 }

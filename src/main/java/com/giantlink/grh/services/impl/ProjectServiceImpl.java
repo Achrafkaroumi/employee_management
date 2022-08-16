@@ -1,6 +1,7 @@
 package com.giantlink.grh.services.impl;
 
 import com.giantlink.grh.entities.Project;
+import com.giantlink.grh.exceptions.AlreadyExists;
 import com.giantlink.grh.exceptions.NotFoundException;
 import com.giantlink.grh.mappers.ProjectMapper;
 import com.giantlink.grh.models.Requests.ProjetRequest;
@@ -41,7 +42,10 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public ProjectResponse add (ProjetRequest projectRequest) {
+    public ProjectResponse add (ProjetRequest projectRequest) throws AlreadyExists {
+        if(projectRepository.findByProjectName(projectRequest.projectName)!=null){
+            throw new AlreadyExists("Project with name : "+projectRequest.projectName+" already exists");
+        }
         Project project = ProjectMapper.INSTANCE.requestToProject(projectRequest);
         return ProjectMapper.INSTANCE.projectToResponse(projectRepository.save(project));
     }
@@ -49,11 +53,12 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public ProjectResponse update(Integer id, ProjetRequest projetRequest) throws NotFoundException{
         Project project = ProjectMapper.INSTANCE.requestToProject(projetRequest);
-        if(!projectRepository.findById(id).isPresent()){
-            throw new NotFoundException("Project with id : "+ id+ " not found");
+        Optional<Project> findById = projectRepository.findById(id);
+        if(!findById.isPresent()){
+            throw new NotFoundException("Project not found");
         }
-        if(projectRepository.findById(id).isPresent()){
-            project.setId(id);
+        if(findById.isPresent()){
+                project.setId(id);
         }
         return ProjectMapper.INSTANCE.projectToResponse(project);
     }
@@ -61,7 +66,7 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public void delete(Integer id) throws NotFoundException{
         if(!projectRepository.findById(id).isPresent()){
-            throw new NotFoundException("Project with id : "+ id+ " not found");
+            throw new NotFoundException("Project not found");
         }
         projectRepository.deleteById(id);
     }

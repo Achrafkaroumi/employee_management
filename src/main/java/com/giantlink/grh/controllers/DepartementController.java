@@ -1,6 +1,5 @@
 package com.giantlink.grh.controllers;
 
-import com.giantlink.grh.entities.Departement;
 import com.giantlink.grh.exceptions.AlreadyExists;
 import com.giantlink.grh.exceptions.NotFoundException;
 import com.giantlink.grh.models.Requests.DepartementRequest;
@@ -14,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/v1/departement")
 public class DepartementController {

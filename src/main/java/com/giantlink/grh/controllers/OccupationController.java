@@ -1,7 +1,6 @@
 package com.giantlink.grh.controllers;
 
-import com.giantlink.grh.entities.Occupation;
-import com.giantlink.grh.entities.Team;
+import com.giantlink.grh.exceptions.AlreadyExists;
 import com.giantlink.grh.exceptions.NotFoundException;
 import com.giantlink.grh.models.Requests.OccupationRequest;
 import com.giantlink.grh.models.Responses.OccupationResponse;
@@ -14,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/v1/occupation")
 public class OccupationController {
@@ -35,12 +35,12 @@ public class OccupationController {
 	}
 
 	@PostMapping("/add")
-	public ResponseEntity<OccupationResponse> add(@RequestBody @Valid OccupationRequest occupationRequest) {
+	public ResponseEntity<OccupationResponse> add(@RequestBody @Valid OccupationRequest occupationRequest) throws AlreadyExists {
 		return new ResponseEntity<OccupationResponse>(occupationService.add(occupationRequest), HttpStatus.CREATED);
 	}
 
 	@PutMapping("/update/{id}")
-	public ResponseEntity<OccupationResponse> update(@PathVariable Integer id , @RequestBody @Valid OccupationRequest occupationRequest) throws NotFoundException {
+	public ResponseEntity<OccupationResponse> update(@PathVariable Integer id , @RequestBody @Valid OccupationRequest occupationRequest) throws NotFoundException, AlreadyExists {
 		return new ResponseEntity<>(occupationService.update(id,occupationRequest), HttpStatus.OK);
 	}
 

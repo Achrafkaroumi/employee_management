@@ -1,6 +1,6 @@
 package com.giantlink.grh.controllers;
 
-import com.giantlink.grh.entities.Employee;
+import com.giantlink.grh.exceptions.AlreadyExists;
 import com.giantlink.grh.exceptions.NotFoundException;
 import com.giantlink.grh.models.Requests.EmployeeRequest;
 import com.giantlink.grh.models.Responses.EmployeeResponse;
@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/v1/employee")
 public class EmployeeController {
@@ -34,12 +35,12 @@ public class EmployeeController {
 	}
 
 	@PostMapping("/add")
-	public ResponseEntity<EmployeeResponse> add(@RequestBody @Valid EmployeeRequest employeeRequest) {
+	public ResponseEntity<EmployeeResponse> add(@RequestBody @Valid EmployeeRequest employeeRequest) throws AlreadyExists {
 		return new ResponseEntity<EmployeeResponse>(employeeService.add(employeeRequest), HttpStatus.CREATED);
 	}
 
 	@PutMapping("/update/{id}")
-	public ResponseEntity<EmployeeResponse> update(@PathVariable Integer id , @RequestBody EmployeeRequest employeeRequest)throws NotFoundException{
+	public ResponseEntity<EmployeeResponse> update(@PathVariable Integer id , @RequestBody EmployeeRequest employeeRequest)throws NotFoundException,AlreadyExists{
 		return new ResponseEntity<>(employeeService.update(id,employeeRequest), HttpStatus.OK);
 	}
 

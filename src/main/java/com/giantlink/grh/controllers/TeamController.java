@@ -1,6 +1,6 @@
 package com.giantlink.grh.controllers;
 
-import com.giantlink.grh.entities.Team;
+import com.giantlink.grh.exceptions.AlreadyExists;
 import com.giantlink.grh.exceptions.NotFoundException;
 import com.giantlink.grh.models.Requests.TeamRequest;
 import com.giantlink.grh.models.Responses.TeamResponse;
@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/v1/team")
 public class TeamController {
@@ -34,12 +35,12 @@ public class TeamController {
 	}
 
 	@PostMapping("/add")
-	public ResponseEntity<TeamResponse> add(@RequestBody @Valid TeamRequest teamRequest) {
+	public ResponseEntity<TeamResponse> add(@RequestBody @Valid TeamRequest teamRequest) throws AlreadyExists {
 		return new ResponseEntity<TeamResponse>(teamService.add(teamRequest), HttpStatus.CREATED);
 	}
 
 	@PutMapping("/update/{id}")
-	public ResponseEntity<TeamResponse> update(@PathVariable Integer id , @RequestBody @Valid TeamRequest teamRequest) throws NotFoundException {
+	public ResponseEntity<TeamResponse> update(@PathVariable Integer id , @RequestBody @Valid TeamRequest teamRequest) throws NotFoundException, AlreadyExists {
 		return new ResponseEntity<>(teamService.update(id,teamRequest), HttpStatus.OK);
 	}
 

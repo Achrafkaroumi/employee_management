@@ -13,5 +13,7 @@ import java.util.Set;
 @NoArgsConstructor
 public class TeamResponse {
     private Integer id;
+    private String teamName;
+    private String teamDesc;
     private Set<EmployeeResponse> employees;
 }

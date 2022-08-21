@@ -36,7 +36,7 @@ public class JwtUtils {
         try {
             return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token);
         } catch (SignatureException e) {
-            // TODO: handle exception
+            System.out.println(e.getMessage());
         } catch (MalformedJwtException e) {
             System.out.println(e.getMessage());
         } catch (ExpiredJwtException e) {

@@ -13,6 +13,8 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Table(name = "tbl_company")
@@ -33,4 +35,9 @@ public class Company {
 	@JsonManagedReference
 	@OneToMany(mappedBy = "company", fetch = FetchType.EAGER)
 	private Set<CompanyEntity> entities;
+
+	@JsonManagedReference
+	@OneToMany(fetch = FetchType.EAGER , mappedBy = "company")
+	@OnDelete(action = OnDeleteAction.CASCADE)
+	private Set<CompanyImage> images;
 }

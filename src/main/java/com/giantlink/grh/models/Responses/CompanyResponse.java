@@ -1,5 +1,7 @@
 package com.giantlink.grh.models.Responses;
 
+import com.giantlink.grh.entities.CompanyEntity;
+import com.giantlink.grh.entities.CompanyImage;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,5 +19,6 @@ public class CompanyResponse {
     private String email;
     private String address;
     private String phone;
-    private Set<CompanyEntityResponse> entities;
+    private Set<CompanyEntity> entities;
+    private Set<CompanyImage> images;
 }

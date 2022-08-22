@@ -51,7 +51,7 @@ public class CompanyController {
 
 	@GetMapping
 	@PreAuthorize("hasRole('ROLE_USER')")
-	public ResponseEntity<List<Company>> get(@RequestParam(name = "page",defaultValue = "0")int page , @RequestParam(name = "size",defaultValue = "3")int size  ){
+	public ResponseEntity<List<Company>> get(@RequestParam(name = "page")int page , @RequestParam(name = "size")int size  ){
 		Pageable pageable = PageRequest.of(page, size);
 		return new ResponseEntity<List<Company>>(companyService.get(pageable), HttpStatus.OK);
 	}

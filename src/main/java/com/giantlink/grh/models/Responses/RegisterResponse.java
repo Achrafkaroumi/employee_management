@@ -2,6 +2,7 @@ package com.giantlink.grh.models.Responses;
 
 import com.giantlink.grh.entities.Role;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -10,6 +11,7 @@ import java.util.Set;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class RegisterResponse {
     private Integer id;
     private String username;

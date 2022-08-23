@@ -1,7 +1,5 @@
 package com.giantlink.grh.controllers;
 
-import java.util.HashSet;
-import java.util.Set;
 
 import com.giantlink.grh.models.Requests.LoginRequest;
 import com.giantlink.grh.models.Requests.RegisterRequest;
@@ -16,14 +14,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.giantlink.grh.entities.ERole;
-import com.giantlink.grh.entities.Role;
-import com.giantlink.grh.entities.User;
-
 import com.giantlink.grh.repositories.RoleRepository;
 import com.giantlink.grh.repositories.UserRepository;
-
 import javax.validation.Valid;
 
 
@@ -34,7 +26,6 @@ public class AuthController {
     UserRepository userRepository;
     @Autowired
     RoleRepository roleRepository;
-
     @Autowired
     AuthService authService;
     @Autowired
@@ -46,7 +37,7 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<RegisterResponse> register(@RequestBody RegisterRequest registerRequest) {
+    public ResponseEntity<RegisterResponse> register(@RequestBody @Valid RegisterRequest registerRequest) {
         return new ResponseEntity<RegisterResponse>(authService.register(registerRequest), HttpStatus.CREATED);
     }
 

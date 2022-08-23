@@ -14,7 +14,6 @@ import com.giantlink.grh.services.CompanyImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
@@ -40,28 +39,32 @@ public class CompanyController {
 	CompanyImageService companyImageService;
 
 	@GetMapping("/all")
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER','ROLE_MODERATOR')")
 	public ResponseEntity<List<CompanyResponse>> get() throws NotFoundException {
 		return new ResponseEntity<List<CompanyResponse>>(companyService.get(), HttpStatus.OK);
 	}
 
 	@GetMapping("/{id}")
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER','ROLE_MODERATOR')")
 	public ResponseEntity<CompanyResponse> get(@PathVariable Integer id) throws NotFoundException {
 		return new ResponseEntity<>(companyService.get(id), HttpStatus.OK);
 	}
 
 	@GetMapping
-	@PreAuthorize("hasRole('ROLE_USER')")
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER','ROLE_MODERATOR')")
 	public ResponseEntity<List<Company>> get(@RequestParam(name = "page")int page , @RequestParam(name = "size")int size  ){
 		Pageable pageable = PageRequest.of(page, size);
 		return new ResponseEntity<List<Company>>(companyService.get(pageable), HttpStatus.OK);
 	}
 
 	@PostMapping("/add")
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MODERATOR')")
 	public ResponseEntity<CompanyResponse> add(@Valid @RequestBody CompanyRequest company) throws AlreadyExists{
 		return new ResponseEntity<CompanyResponse>(companyService.add(company), HttpStatus.CREATED);
 	}
 
 	@PostMapping("/upload/{id}")
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MODERATOR')")
 	public ResponseEntity<CompanyImageResponse> uploadDb(@PathVariable(value = "id")Integer companyId ,
 														 @RequestParam(value = "image")MultipartFile image) throws IOException {
 
@@ -72,6 +75,7 @@ public class CompanyController {
 		return new ResponseEntity<>(saveCompanyImage,HttpStatus.OK);
 	}
 	@GetMapping("/download/{id}")
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MODERATOR')")
 	public ResponseEntity<Resource> download(@PathVariable String id) throws NotFoundException{
 		CompanyImage companyImage = companyImageService.getImage(id);
 		return ResponseEntity.ok().contentType(MediaType.parseMediaType(companyImage.getImageType()))
@@ -80,11 +84,13 @@ public class CompanyController {
 	}
 
 	@PutMapping("/update/{id}")
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MODERATOR')")
 	public ResponseEntity<CompanyResponse> update(@PathVariable Integer id ,@Valid @RequestBody CompanyRequest company) throws NotFoundException {
 		return new ResponseEntity<>(companyService.update(id,company), HttpStatus.OK);
 	}
 
 	@DeleteMapping("/delete/{id}")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ResponseEntity<Object> delete(@PathVariable Integer id) throws NotFoundException {
 		companyService.delete(id);
 		return ResponseEntity.ok("Entity deleted");
